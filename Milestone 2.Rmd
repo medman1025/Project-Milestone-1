@@ -1,0 +1,184 @@
+---
+title: "Project Milestone 2"
+author: "Alan Jones"
+date: "March 29, 2017"
+output:
+  word_document: default
+  html_document: default
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+##Project
+Title: Dialysis-Related Anemia and Readmission Rates
+
+Author: Alan Jones
+
+E-mail: ajone30@emory.edu
+
+Project data is available at: https://github.com/EmoryN741/Jones_Alan.git
+
+Original data is available from two Medicare websites:
+
+1. https://data.medicare.gov/Dialysis-Facility-Compare/ESRD-QIP-Anemia-Management-Reporting-Payment-Year-/t6ez-29z5
+
+2. https://data.medicare.gov/Dialysis-Facility-Compare/ESRD-QIP-Standardized-Readmission-Ratio-Payment-Ye/efv3-vm3n
+
+The data available from the two Medicare websites was relatively clean at the time of download. Several filters, such as state, measure name, and reporting score, were available to limit the data to any desired values, and the filtered data was then available to download as a CSV file which was downloaded in an Excel file format and then imported into RStudio.
+
+The original source of all available Medicare data regarding patient outcomes and facility scores is located at https://data.medicare.gov. Once at this homepage, you then choose 1 of 2 options: find a Medicare-apptoved provider or explore and download data that is available from Medicare. After choosing to explore and download data, one of the available categories of data is labeled 'Dialysis Facility Compare'. Data on an array of renal and dialysis measurements, ranging from adequacy to phosphorus levels to mineral metabolism reporting scores, is available from every dialysis facility in each of the 50 states that receives Medicare reimbursement for dialysis services. 
+
+Medicare is automatically given to any patient, regardless of age, who is diagnosed with end-stage renal disease (ESRD) and requires dialysis as a life-sustaining treatment. There are two dialysis options: hemodialysis and peritoneal dialysis. Hemodialysis is by far the most commonly prescribed and administered dialysis treatment with almost 90% of ESRD patients receiving hemodialysis. One of the most common symptoms seen in patients who have kidneys that no longer function properly is chronic anemia. Dialysis facilties are, in principle, expected to maintain anemia levels to a satisfactory level becuase the procedure itself is designed to increase blood levels. Supplementary blood transfusions are also relatively easy to perform while a patient is being actively dialyzed, if that becomes a necessary treatment to improve anemia symptoms.
+
+As a nurse on a medical nephrology unit, I saw many patients being frequently readmitted for similar diagnoses, with one of the most chronic reasons for hospitalization being anemia. In this project, I am interested in seeing any link can be observed between dialysis clinic performance in managing anemia and readmission rates. I am interested in seeing why these patients are readmitted frequently when dialysis centers are designed to treat the most common issues these patients typically face, such as anemia.
+
+I chose to examine the data from two separate states that were each in a different region of the country: Georgia and Minnesota. The United States Census Bureau lists the population of each state, respectively, as 10.31 million and 5.52 million as of July 2016. Medicare lists the amount of dialysis clinics in each state, respectively, as 336 and 117 as of January 2017. It is an interesting observation that Georgia has approximately double the population of Minnesota, yet has approximately triple the amount of dialysis clinics. 
+
+I installed the "readxl" package to easily read Excel files, which is how these two datasets are presented.
+
+I have examined the plots of the anemia and SRR (standardized readmission ratio) scores and have created histograms of the data to observe trends. I changed several character variables to numeric so that this step would be possible. I put the separate variables of "anemia" and "readmissions" into one additional excel file. This file was then put in csv format and was then separated (again) into Georgia only, Minnesota only, and Georgia and Minnesota together. Much of the R code is not being knitted (with the command "include=FALSE") to save space on this document, but the code has been pushed to my Github.
+
+```{r, include=FALSE}
+library(readxl)
+Anemia <- read_excel("~/Anemia.xlsx")
+View(Anemia)
+```
+
+```{r, include=FALSE}
+library(readxl)
+Readmissions <- read_excel("~/Readmissions.xlsx")
+View(Readmissions)
+```
+
+```{r, include=FALSE}
+summary(Anemia)
+```
+
+```{r, include=FALSE}
+summary(Readmissions)
+```
+
+```{r, include=FALSE}
+variable.names(Anemia)
+```
+
+```{r, include=FALSE}
+variable.names(Readmissions)
+```
+
+```{r, include=FALSE}
+is.character(Anemia$`Anemia Management Reporting Score`)
+```
+```{r, include=FALSE}
+as.numeric(Anemia$`Anemia Management Reporting Score`)
+```
+
+```{r, include=FALSE}
+is.character(Readmissions$`Achievement Measure Ratio`)
+```
+```{r, include=FALSE}
+as.numeric(Readmissions$`Achievement Measure Ratio`)
+```
+```{r, include=FALSE}
+is.character(Readmissions$`SRR Measure Score`)
+```
+```{r, include=FALSE}
+as.numeric(Readmissions$`SRR Measure Score`)
+```
+
+```{r, include=FALSE}
+na.omit(Readmissions$`SRR Measure Score`)
+```
+
+```{r, include=FALSE}
+na.omit(Readmissions$`Achievement Measure Ratio`)
+```
+
+```{r, include=FALSE}
+Readmissions$`SRR Measure Score` <- as.numeric(Readmissions$`SRR Measure Score`)
+suppressWarnings(as.numeric(Readmissions$`SRR Measure Score`))
+```
+
+```{r, include=FALSE}
+Readmissions$`Achievement Measure Ratio` <- as.numeric(Readmissions$`Achievement Measure Ratio`)
+suppressWarnings(as.numeric(Readmissions$`Achievement Measure Ratio`))
+```
+
+```{r, include=FALSE}
+Anemia$`Anemia Management Reporting Score` <- as.numeric(Anemia$`Anemia Management Reporting Score`)
+suppressWarnings(as.numeric(Anemia$`Anemia Management Reporting Score`))
+```
+
+```{r}
+hist(Anemia$`Anemia Management Reporting Score`)
+```
+```{r}
+hist(Readmissions$`Achievement Measure Ratio`)
+```
+```{r}
+hist(Readmissions$`SRR Measure Score`)
+```
+```{r, include=FALSE}
+library(readxl)
+Graph_GA_and_MN <- read_excel("~/Graph GA and MN.xlsx", 
+    col_types = c("numeric", "numeric"))
+View(Graph_GA_and_MN)
+```
+
+```{r}
+plot.default(Graph_GA_and_MN)
+```
+
+```{r, include=FALSE}
+library(readxl)
+GA_Only <- read_excel("~/GA Only.xlsx", col_types = c("numeric", 
+    "numeric"))
+View(GA_Only)
+```
+
+```{r}
+plot.default(GA_Only)
+```
+
+```{r, include=FALSE}
+library(readxl)
+MN_Only <- read_excel("~/MN Only.xlsx", col_types = c("numeric", 
+    "numeric"))
+View(MN_Only)
+```
+
+```{r}
+plot.default(MN_Only)
+```
+
+```{r}
+hist(MN_Only$Anemia)
+```
+
+```{r}
+hist(MN_Only$Readmit)
+```
+
+```{r}
+hist(GA_Only$Anemia)
+```
+
+```{r}
+hist(GA_Only$Readmit)
+```
+
+```{r}
+hist(Graph_GA_and_MN$Anemia)
+```
+
+```{r}
+hist(Graph_GA_and_MN$Readmit)
+```
+```{r}
+summary(Anemia)
+```
+
+```{r}
+summary(Readmissions)
+```
+
