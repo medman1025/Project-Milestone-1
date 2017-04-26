@@ -1,0 +1,314 @@
+---
+title: "N741 Final"
+author: "Alan M. Jones"
+date: "April 26, 2017"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Project
+Title: Dialysis-Related Anemia and Readmission Rates
+
+Author: Alan M. Jones
+
+E-mail: ajone30@emory.edu
+
+Project data is available at: https://github.com/EmoryN741/Jones_Alan.git, https://github.com/medman1025, and https://github.com/medman1025/Project-Milestone-1
+
+##Abstract
+End-stage renal disease (ESRD) incidence continues to increase with more and more patients having to undergo hemodialysis treatments. Hemodialysis and ESRD are fraught with complications, including chronic anemia and a relatively high hospital readmission rate. The issues of anemia and readmission are known to be independent issues of concern for the population, but have not been heavily researched in tandem for any association. This project aims to begin the process of examining the existing data on anemia and readmission for ESRD patients. Medicare's dialysis facility datasets were used for the raw data, and R statistical software was used for the analysis and figure output. The 331 dialysis centers in Georgia and 117 dialysis centers in Minnesota were used for data. Some association was seen between subpar anemia scores and increased readmissions in both Georgia and Minnesota. There were also more subpar readmission scores reported in both Georgia and Minnesota than was expected. There was some difficulty in assessing the association since anemia scores do not greatly vary in value from a plotting standpoint. Future research is needed to better score anemia levels for easier analysis of the topic.
+
+##Introduction and Background
+
+End-stage renal disease (ESRD) has increased as a cause of worldwide mortality over the last 20 years, second only to HIV and AIDS, with rates continuing to increase annually by 4-5%. In the U.S., ESRD treatment exceeds 48 billion dollars annually, with dialysis and transplantation as the two treatment options for this population.  Medicare coverage is extended to anyone requiring dialysis, and Medicare absorbs over 80% of dialysis costs in the U.S. at an annual average of $90,000 spent per patient. ESRD patients represent less than 1% of the U.S. Medicare population, but treatment costs for this population account for more than 7% of the entire Medicare budget. Hemodialysis is the most commonly administered treatment option, but it is fraught with high morbidity and mortality rates. After one year of treatment, patients on hemodialysis have an estimated 20-25% mortality rate, with a 5-year survival rate of 35%. This population also suffers from a high hospital readmission rate, even when compared to other patient groups with chronic disease conditions. 
+
+Although there are substantial mortality and morbidity issues, federal cost expenditures, and readmission concerns in this population, research remains in the fledgling stages of examining modifiable reasons for excessive hospital readmission related to hemodialysis or ESRD complications. One of the most common symptoms seen in patients who have ESRD is chronic anemia. Dialysis facilties are, in principle, expected to maintain anemia levels at a satisfactory level becuase the procedure itself is designed to increase blood levels. Supplementary blood transfusions are also relatively easy to perform while a patient is being actively dialyzed, if that becomes a necessary treatment to improve anemia symptoms. As a nurse on a medical nephrology unit, I saw many patients being frequently readmitted for similar diagnoses, with one of the most chronic reasons for hospitalization being anemia. 
+
+The purpose of this project is to see if any association can be observed between dialysis clinic performance in managing anemia and readmission rates. I am interested in seeing why these patients are readmitted frequently when dialysis centers are designed to treat the most common issues these patients typically face, such as anemia. The question of interest is: Is there an association between subpar anemia scores and higher than desired readmission rates? The hypothesis is that dialysis centers with subpar anemia management reporting scores that are less than 10 will report hospital readmission rates at a higher rate than expected. The theory behind the proposed question and hypothesis is that centers who do not deliver expected results in anemia management will leave patients more prone to complications that result in higher than expected readmission rates.  
+
+##Methodology
+
+The data used in this project is available from the following 2 Medicare websites that are available for public download:
+
+1. https://data.medicare.gov/Dialysis-Facility-Compare/ESRD-QIP-Anemia-Management-Reporting-Payment-Year-/t6ez-29z5
+
+2. https://data.medicare.gov/Dialysis-Facility-Compare/ESRD-QIP-Standardized-Readmission-Ratio-Payment-Ye/efv3-vm3n
+
+These two Medicare websites were relatively clean at the time of download. Since dialysis centers are largely reliant on Medicare funds, their data being readily available for Medicare reporting purposes is not surprising. Several filters, such as state, measure name, and reporting score, were available to limit the data to any desired values, and the filtered data was then available to download as a CSV file which was downloaded in an Excel file format and then imported into RStudio.
+
+The original source of all available Medicare data regarding patient outcomes and facility scores is located at https://data.medicare.gov. Once at this homepage, you then choose 1 of 2 options: find a Medicare-apptoved provider or explore and download data that is available from Medicare. After choosing to explore and download data, one of the available categories of data is labeled 'Dialysis Facility Compare'. Data on an array of renal and dialysis measurements, ranging from adequacy to phosphorus levels to mineral metabolism reporting scores, is available from every dialysis facility in each of the 50 states that receives Medicare reimbursement for dialysis services. 
+
+The United States Renal Data System divides the United States into 18 separate networks based on population and geographic location. I chose to examine the data from two separate networks that were each in a different region of the country: Networks 6 and 11. For this project, I chose to use the one state in each network that had the highest proportion of dialysis clinics when compared to the population. In Network 6, that state was Georgia and in Network 11, that state was Minnesota. The United States Census Bureau lists the population of each state, respectively, as 10.31 million and 5.52 million as of July 2016. Medicare lists the amount of dialysis clinics in each state, respectively, as 336 and 117 as of January 2017. It is an interesting observation that Georgia has approximately double the population of Minnesota, yet has approximately triple the amount of dialysis clinics. Missing data is already accounted for in each dataset with n/a used to fill in the missing cell value. In the Anemia datasets, Georgia had 14 missing values and Minnesota had 9. In the Readmissions dataset, Georgia had 16 missing values and Minnesota had 12. 
+
+In R, I installed the "readxl" package to easily read Excel files, which is how these two datasets are presented. They were then converted to csv files that were easily imported into R in this format.
+
+I examined the plots of the anemia management reporting scores and SRR (standardized readmission ratio) scores and have created histograms of the data to observe trends. Medicare sets the expected anemia management reporting score at a 10 on a scale from 1 to 10. Any number below 10 shows a deficiency in that dialysis center's performance on maintaining proper anemia levels. For both Georgia and Minnesota, the lowest value reported by any dialysis center was a 7. The SRR is a Medicare-produced ratio that compares the observed amount of readmissions to the expeced number of readmissions. Medicare defines the term readmission as an unexpected return to a hospital for emergency treatment within 30 days of a previous admission. Because the SSE is a ratio, a score of 1.0 is considered an expected score with the amount of observed readmissions equaling the amount of expected observations. Ratio values lower than 1.0 indicate that the dialysis center is doing better than expected on readmissions, and that readmission rates are lower than expected or predicted. Ratio values greater than 1.0 indicate that the dialysis center is not doing as well as expected on readmissions, and that readmission rates are higher than expected or predicted.
+
+In regards to the SRR, almost all of the values hover to some degree around the central score of 1.0 which makes analyzing any plots, histograms, figures, etc. somewhat difficult to discern. To make analyzation easier, I created an Adjusted Readmission Value that converted the SRR data to numbers that would fall on a 1 to 10 scale. In this format, the SRR score of 1.0 corresponds to a value of 5 on the scale. Numbers between 5 and 10 correspond to the SRR numbers between 0.0 and 1.0. This means that numbers above 5 and going all the way to 10 indicate that the dialysis center is performing better than expected in regards to readmission rates. Likewise, numbers between 0 and 5 correspond to the SRR numbers above 1.0. This means that numbers below 5 and going all the way to 0 indicate that the dialysis center is performing worse than expected in regards to readmission rates. 
+
+I changed several character variables to a numeric format so that easier analysis would be possible. I put the separate variables of "anemia" and "readmissions" into one additional excel file. This file was then put in csv format and was then separated (again) into Georgia only, Minnesota only, and Georgia and Minnesota together. Much of the R code is being knitted in this document to show full results, and the same code has been pushed to my Github repository for this project.
+
+##Data Summary and Results
+
+This data summary and results section shows the R code used in this project and displays the output for each individual chunk of R code. Produced tables of the data will following the figures produced by the R code. Following all R code, figures, and tables will be a brief discussion of the results. The following sections after this will further elaborate on the interpretation, conclusions, and limitations of the project.
+
+```{r}
+library(readxl)
+Anemia <- read_excel("~/Anemia.xlsx")
+View(Anemia)
+```
+
+```{r}
+library(readxl)
+Readmissions <- read_excel("~/Readmissions.xlsx")
+View(Readmissions)
+```
+
+```{r}
+summary(Anemia)
+```
+
+```{r}
+summary(Readmissions)
+```
+
+```{r}
+variable.names(Anemia)
+```
+
+```{r}
+variable.names(Readmissions)
+```
+
+```{r}
+is.character(Anemia$`Anemia Management Reporting Score`)
+```
+
+```{r}
+as.numeric(Anemia$`Anemia Management Reporting Score`)
+```
+
+```{r}
+is.character(Readmissions$`Achievement Measure Ratio`)
+```
+
+```{r}
+as.numeric(Readmissions$`Achievement Measure Ratio`)
+```
+
+```{r}
+is.character(Readmissions$`SRR Measure Score`)
+```
+
+```{r}
+as.numeric(Readmissions$`SRR Measure Score`)
+```
+
+```{r}
+na.omit(Readmissions$`SRR Measure Score`)
+```
+
+```{r}
+na.omit(Readmissions$`Achievement Measure Ratio`)
+```
+
+```{r}
+Readmissions$`SRR Measure Score` <- as.numeric(Readmissions$`SRR Measure Score`)
+suppressWarnings(as.numeric(Readmissions$`SRR Measure Score`))
+```
+
+```{r}
+Readmissions$`Achievement Measure Ratio` <- as.numeric(Readmissions$`Achievement Measure Ratio`)
+suppressWarnings(as.numeric(Readmissions$`Achievement Measure Ratio`))
+```
+
+```{r}
+Anemia$`Anemia Management Reporting Score` <- as.numeric(Anemia$`Anemia Management Reporting Score`)
+suppressWarnings(as.numeric(Anemia$`Anemia Management Reporting Score`))
+```
+
+```{r}
+hist(Anemia$`Anemia Management Reporting Score`)
+```
+
+```{r}
+hist(Readmissions$`Achievement Measure Ratio`)
+```
+
+```{r}
+hist(Readmissions$`SRR Measure Score`)
+```
+
+```{r}
+library(readxl)
+Graph_GA_and_MN <- read_excel("~/Graph GA and MN.xlsx", 
+    col_types = c("numeric", "numeric"))
+View(Graph_GA_and_MN)
+suppressWarnings(Graph_GA_and_MN)
+```
+
+```{r}
+plot.default(Graph_GA_and_MN)
+```
+
+```{r}
+library(readxl)
+GA_Only <- read_excel("~/GA Only.xlsx", col_types = c("numeric", 
+    "numeric"))
+View(GA_Only)
+suppressWarnings(GA_Only)
+```
+
+```{r}
+plot.default(GA_Only)
+```
+
+```{r}
+library(readxl)
+MN_Only <- read_excel("~/MN Only.xlsx", col_types = c("numeric", 
+    "numeric"))
+View(MN_Only)
+suppressWarnings(MN_Only)
+```
+
+```{r}
+plot.default(MN_Only)
+```
+
+```{r}
+hist(MN_Only$Anemia)
+```
+
+```{r}
+hist(MN_Only$Readmit)
+```
+
+```{r}
+hist(GA_Only$Anemia)
+```
+
+```{r}
+hist(GA_Only$Readmit)
+```
+
+```{r}
+hist(Graph_GA_and_MN$Anemia)
+```
+
+```{r}
+hist(Graph_GA_and_MN$Readmit)
+```
+
+```{r}
+summary(Anemia)
+```
+
+```{r}
+summary(Readmissions)
+```
+
+```{r}
+attach(MN_Only)
+plot(MN_Only$Anemia,MN_Only$Readmit, main="Scatterplot of Readmissions vs. Anemia")
+```
+
+```{r}
+attach(GA_Only)
+plot(GA_Only$Anemia,GA_Only$Readmit, main="Scatterplot of Readmissions vs. Anemia")
+```
+
+The results show that, for both Georgia and Minnesota, anemia scores are mostly at a 10 with a few exceptions lower going all the way to 1 center per state reporting a score of 7. When using SSR or the Adjusted Readmission Value, the results indicate that there are several dialysis centers reporting readmission rates higher than expected or predicted. In the SSR histogram, the distribution is fairly normal with a slight positive skew indicating that the mean is slightly above the peak. The histogram of the adjusted Readmission value shows a clear picture of the distribution containing several values above the expected value of 5.0, indicating that readmission rates for those centers are higher than anticipated. The same is true when the graphs are divided by state, with Minnesota showing even more values between 5.0 and 10.0. Plotting the anemia scores vs. Readmission scores in overall format, as well as by each individual state, produced interesting results if somewhat difficult to interpret since the vast majority of anemia scores fall at the value of 10.0. Tables of the data better display the fact that the majority of centers in both states have anemia management reporting scores of 10.0. In Georgia, 290/331 have this value and Minnesota has 97/117 reporting this value. The anemia values in each state also have a few missing values that Medicare has coded N/A. There were 14 missing values in Georgia and 9 in Minnesota. For the adjusted Readmission value, in both Georgia and Minnesota, there is no value that received a vast majority in the frequency tables. 59/117 centers in Minnesota have a readmission value between 6.0 and 10.0, indicating higher than expected readmission rates. 152/331 centers in Georgia have readmission rates in the same range between 6.0 and 10.0. These values for both states are higher than I would have anticipated.
+
+The results indicate several things. The first is that anemia management reporting scores are not all where they should be considering that dialysis centers are equipped, and function, to treat anemia in ESRD patients. Second, there is a fairly high frequency of centers in these two states with readmission rates that are higher than expected. While there is only 1 center in each state with an anemia score of 7, it is an interesting result that their SSR values are at 1.0 and 0.6 which indicates that readmission rates at these centers are better than anticipated. The results also show more Readmission values at higher than expected levels being reported from centers who have an anemia management score of 10.0.
+
+##Interpretation
+
+Based on the results from Georgia and Minnesota, there appears to be some relation between anemia management reporting scores and readmission rates, but no definiteive association, causation, or correlation can be determined from the data. Indeed, as mentioned in the results section, the 2 centers with the lowest reported anemia value of 7.0 had a readmission score that was at or below the expected value. Adjusting the SSR into a readmission value that was scaled from 1 to 10 made those results easier to see and analyze. For better analysis of this data, the same needs to coccur for the anemia values. Since the majority of anemia values are at a 10.0, a better way to truly stratify those results would be to change the measurement where a 10.0 would have to be the value reported only if truly optimal results are obtained. 
+
+##Data Dictionary
+
+The memisc package was installed so that a data dictionary could be produced on the datasets. Below is the information provided by the data dictionary in R chunks. 
+
+```{r}
+Hmisc::describe(Anemia)
+```
+
+```{r}
+Hmisc::describe(Readmissions)
+```
+
+```{r}
+Hmisc::describe(GA_Only)
+```
+
+```{r}
+Hmisc::describe(MN_Only)
+```
+
+
+##Limitations
+
+The majority of anemia scores made reading the plots, graphs, etc. somewhat difficult to interpret. In future studies, better data may be obtained by examining all states within a network, or even all states if that data analysis is possible. Confounder variables were not factored in to the hypothesis or outcome results. 
+
+##Conclusions
+Although there appears to be some possible association with anemia scores and readmission rates, the data available from Georgia and Minnesota does not give conclusive evidence to this statement. It is possible that better conclusions can be made with an anemia score system that is more specific in performance, which would hopefully delineate the results beyond the overwhelming majority reporting a 10.0 score. Regression models that account for variables contributing to either confounding and/or effect size may be useful in further determining a cause for higher than expected readmission rates. This step seems possible in future research because there are many other Medicare datasets available with other variables that are measured and reported from dialysis centers. It was an interesting conclusion that was observed showing that, although the majority of centers have an anemia score of 10.0, the SRR and Readmission values varied widely from well above the expected number to well below the expected number. I assert that a more detailed analysis is needed on multiple states from the various USRDS networks as well on the other variables available for analysis from Medicare to further explore association between anemia and readmission. I also assert that a modified anemia management scale is necessary to clarify results.
+
+##References
+
+1 Matteson, M., & Russell, C. (2010). Interventions to improve hemodialysis adherence: A systematic review of randomized‐controlled trials. Hemodialysis International, 14(4), 370-382. doi: 10.1111/j.1542-4758.2010.00462.x
+
+2 Brownbridge, G., & Fielding, D. (1994). Psychosocial adjustment and adherence to dialysis treatment regimes. Pediatric Nephrology, 8(6), 744-749. Doi: 10.1007/BF00869109
+
+3 Green, J., Mor, M., Shields, A., Sevick, M., Arnold, R., Palevsky, M., & Weisbord, S. (2013). Associations of health literacy with dialysis adherence and health resource utilization in patients receiving maintenance hemodialysis. American Journal of Kidney Diseases, 62(1), 73-80. doi: 10.1053/j.ajkd.2012.12.014 
+
+4 Griva, K., Lai, A., Lim, H., Yu, Z., Foo, M., & Newman, S. (2014). Non-adherence in patients on peritoneal dialysis: A systematic review. PloS One, 9(2), E89001. doi: 10.1371/journal.pone.0089001
+
+5 Abdel-Kader, K., Dohar, S., Shah, N., Jhamb, M., Reis, S. E., Strollo, P., & Unruh, M. L. (2012). Resistant hypertension and obstructive sleep apnea in the setting of kidney disease. Journal of Hypertension, 30(5), 960–966. doi: 10.1097/HJH.0b013e328351d08a
+
+6 Gigli, G., Adorati, M., Dolso, P., Piani, A., Valente, M., Brotini, S., & Budai, R. (2004). Restless legs syndrome in end-stage renal disease. Sleep Medicine, 5(3), 309-315. doi: 10.1016/j.sleep.2004.01.014
+
+7 Christensen, A.J., Wiebe, J.S., Benotsch, E.G., & Lawton, W.J. (1996). Perceived health competence, health locus of control, and patient adherence in renal dialysis. Cognitive Therapy and Research, 20(4), 411-421.
+
+8 Elias, R., Bradley, T., Kasai, T., Motwani, S., & Chan, C. (2012). Rostral overnight fluid shift in end-stage renal disease: Relationship with obstructive sleep apnea. Nephrology Dialysis Transplantation, 27(4), 1569-1573. doi: 10.1093/ndt/gfr605
+
+9 Kimmel, P., Miller, G., & Mendelson, W. (1989). Sleep apnea syndrome in chronic renal  disease. The American Journal of Medicine, 86(1), 308-314. 
+doi: 10.1016/0002-9343(89)90301-X
+
+10 Hare, J., Clark-Carter, D., & Forshaw, M. (2014). A randomized controlled trial to evaluate the effectiveness of a cognitive behavioral group approach to improve patient adherence to peritoneal dialysis fluid restrictions: A pilot study. Nephrology Dialysis Transplantation, 29(3), 555-564. doi: 10.1093/ndt/gft477
+
+11 Eltawdy, M., Rabah, A., Nada, M., Refaat, R., & Afifi, L. (2013). Sleep disorders in chronic renal failure patients. Sleep Medicine, 14, 55-56. doi: 10.1016/j.sleep.2013.11.098
+
+12 Lee, J., Kim, S., & Jung, H. (2009). Nocturnal Sleep Related with Metabolic Markers in End-Stage Renal Disease Patients Receiving Hemodialysis. Psychiatry Investigation, 6(1), 34-38. doi: 10.4306/pi.2009.6.1.34
+
+13 Merlino, G., Piani, A., Dolso, P., Adorati, M., Cancelli, I., Valente, M., & Gigli, G. (2006). Sleep disorders in patients with end-stage renal disease undergoing dialysis therapy. Nephrology Dialysis Transplantation, 21(1), 184-190. doi: 10.1093/ndt/gfi144
+
+14 Brar, A., Babakhani, A., Salifu, M., & Jindal, R. (2014). Evaluation of non-adherence in patients undergoing dialysis and kidney transplantation: United States transplantation practice patterns survey. Transplantation Proceedings, 46(5), 1340-1346. doi: 10.1016/j.transproceed.2013.12.051
+
+15 Russell, C.L., Cronk, N.J., Herron, M., Knowles, N., Matteson, M.L., Peace, L., & Ponferrada, L. (2011). Motivational Interviewing in Dialysis Adherence Study (MIDAS). Nephrology Nursing Journal, 38(3), 229-236.
+
+16 Weisbord, S. D., Palevsky, P. M., Mor, M. K., Shields, A. J., Fine, M. A., Arnold, R. L., & Green, J. (2014). Associations of depressive symptoms and pain with dialysis adherence, health resource utilization, and mortality in patients receiving chronic hemodialysis. Clinical Journal of the American Society of Nephrology, 9(9), 1594-1602. doi: 10.2215/CJN.00220114
+
+17 Lam, L., Twinn, S., & Chan, S. (2010). Self‐reported adherence to a therapeutic regimen among patients undergoing continuous ambulatory peritoneal dialysis. Journal of Advanced Nursing, 66(4), 763-773. 
+doi: 10.1111/j.1365-2648.2009.05235.x 
+
+18 Tapolyai, M., Fülöp, T., Uysal, A., Lengvárszky, Z., Szarvas, T., Ballard, K., & Dossabhoy, N. (2010). Regional differences in nonadherence to dialysis among southern dialysis patients: A comparative cross-sectional study to the dialysis outcomes and practice patterns study. The American Journal of the Medical Sciences, 339(6), 516-518. doi: 10.1097/MAJ.0b013e3181d94f7a
+
+19 Leggat, J.E. (2005). Adherence with dialysis: A focus on mortality risk. Seminars in Dialysis, 18(2), 137-141.
+
+20 Parker, K. (2003). Sleep disturbances in dialysis patients. Sleep Medicine Reviews,7(2), 131-143.doi: 10.1053/smrv.2001.0240
+
+21 Sakaguchi, Y., Shoji, T., Kawabata, H., Niihata, K., Suzuki, A., Kaneko, T., & Tsubakihara, Y. (2011). High prevalence of obstructive sleep apnea and its association with renal function among nondialysis chronic kidney disease patients in Japan: A cross-sectional study. Clinical Journal of the American Society of Nephrology: CJASN, 6(5), 995-1000. doi: 10.2215/CJN.08670910
+
+22 White, R.B. (2004). Adherence to the dialysis prescription: Partnering with patients for improved outcomes. Nephrology Nursing Journal, 31(4), 432-435.        
+
+23 Chou, Y., Lee, P., Yang, C., Lin, C., Veasey, S., Chuang, L., & Chen, N. (2011). Obstructive sleep apnea: A stand-alone risk factor for chronic kidney disease. Nephrology Dialysis Transplantation,26(7), 2244-2250. 
+doi: 10.1093/ndt/gfq821
+
+24 Losso, R., Minhoto, L., & Riella, M. (2015). Sleep disorders in patients with end-stage renal disease undergoing dialysis: Comparison between hemodialysis, continuous ambulatory peritoneal dialysis and automated peritoneal dialysis. International Urology and Nephrology, 47(2), 369-375. doi: 10.1007/s11255-014-0860-5
+
+

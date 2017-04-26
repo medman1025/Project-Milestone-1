@@ -69,7 +69,6 @@ variable.names(Readmissions)
 ```{r}
 is.character(Anemia$`Anemia Management Reporting Score`)
 ```
-
 ```{r}
 as.numeric(Anemia$`Anemia Management Reporting Score`)
 ```
@@ -77,15 +76,12 @@ as.numeric(Anemia$`Anemia Management Reporting Score`)
 ```{r}
 is.character(Readmissions$`Achievement Measure Ratio`)
 ```
-
 ```{r}
 as.numeric(Readmissions$`Achievement Measure Ratio`)
 ```
-
 ```{r}
 is.character(Readmissions$`SRR Measure Score`)
 ```
-
 ```{r}
 as.numeric(Readmissions$`SRR Measure Score`)
 ```
@@ -116,15 +112,12 @@ suppressWarnings(as.numeric(Anemia$`Anemia Management Reporting Score`))
 ```{r}
 hist(Anemia$`Anemia Management Reporting Score`)
 ```
-
 ```{r}
 hist(Readmissions$`Achievement Measure Ratio`)
 ```
-
 ```{r}
 hist(Readmissions$`SRR Measure Score`)
 ```
-
 ```{r}
 library(readxl)
 Graph_GA_and_MN <- read_excel("~/Graph GA and MN.xlsx", 
@@ -188,15 +181,4 @@ summary(Anemia)
 ```{r}
 summary(Readmissions)
 ```
-
-```{r}
-attach(MN_Only)
-plot(MN_Only$Anemia,MN_Only$Readmit, main="Scatterplot of Readmissions vs. Anemia")
-```
-
-```{r}
-attach(GA_Only)
-plot(GA_Only$Anemia,GA_Only$Readmit, main="Scatterplot of Readmissions vs. Anemia")
-```
-
 
